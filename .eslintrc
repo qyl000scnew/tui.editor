@@ -10,7 +10,7 @@
       "classes": true,
       "spread": true,
       "defaultParams": true,
-      "destructuring": true
+      "destructuring": true,
     }
   },
   "env":{
