@@ -3,6 +3,8 @@
  * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 import $ from 'jquery';
+import ShowDown from 'showdown';
+import TurnDown from 'turndown';
 import util from 'tui-code-snippet';
 
 import domUtils from './domUtils';
@@ -90,11 +92,19 @@ class WwClipboardManager {
     this._clearClipboardArea();
   }
 
+  _clearClipboardHtml($clipboardContainer) {
+    var turndownService = new TurnDown();
+    var showdownConverter = new ShowDown.Converter({'simpleLineBreaks': true});
+    var markStr = turndownService.turndown($clipboardContainer.html());
+    $clipboardContainer.html(showdownConverter.makeHtml(markStr));
+
+    return $clipboardContainer;
+  }
+
   _onWillPaste(pasteData) {
-    const $clipboardContainer = $('<div>').append(pasteData.fragment.cloneNode(true));
-
+    var $clipboardContainer = $('<div>').append(pasteData.fragment.cloneNode(true));
     this._setTableBookmark($clipboardContainer);
-
+    $clipboardContainer = this._clearClipboardHtml($clipboardContainer);
     if (this._pasteToTable($clipboardContainer)) {
       pasteData.preventDefault();
     } else {
@@ -104,6 +114,11 @@ class WwClipboardManager {
       pasteData.fragment = document.createDocumentFragment();
       $($clipboardContainer[0].childNodes).each((index, element) => {
         pasteData.fragment.appendChild(element);
+        // if (element.tagName !== 'img') {
+        //   pasteData.fragment.appendChild(window.document.createTextNode($(element).text()));
+        // } else {
+        //   pasteData.fragment.appendChild(element);
+        // }
       });
     }
 
