@@ -33,7 +33,7 @@ const isHMR = process.argv.indexOf('--hot') >= 0 || process.argv.indexOf('--hotO
 const NAME_SPACE = ['tui', 'Editor'];
 const DIST_DIR_NAME = 'dist';
 const DIST_PATH = path.join(__dirname, DIST_DIR_NAME);
-const DIST_JS_NAME = `tui-editor-[name]${isProduction ? '.min' : ''}.js`;
+const DIST_JS_NAME = `tui-editor-[hash].js`;
 const ANALYZER_DIR = '../report/webpack';
 const PUBLIC_PATH = `http://localhost:8080/${DIST_DIR_NAME}/`;
 const BANNER = [
