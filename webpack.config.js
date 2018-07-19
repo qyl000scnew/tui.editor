@@ -33,7 +33,7 @@ const isHMR = process.argv.indexOf('--hot') >= 0 || process.argv.indexOf('--hotO
 const NAME_SPACE = ['tui', 'Editor'];
 const DIST_DIR_NAME = 'dist';
 const DIST_PATH = path.join(__dirname, DIST_DIR_NAME);
-const DIST_JS_NAME = `tui-editor-[name]${isProduction ? '.min' : ''}.js`;
+const DIST_JS_NAME = `tui-editor-[hash].js`;
 const ANALYZER_DIR = '../report/webpack';
 const PUBLIC_PATH = `http://localhost:8080/${DIST_DIR_NAME}/`;
 const BANNER = [
@@ -43,11 +43,12 @@ const BANNER = [
   `@license ${pkg.license}`
 ].join('\n');
 
-const defaultConfigs = Array(isDevServer ? 1 : 4).fill(0).map(() => {
+// const defaultConfigs = Array(isDevServer ? 1 : 4).fill(0).map(() => {
+const defaultConfigs = Array(1).fill(0).map(() => {
   return {
     cache: false,
     output: {
-      path: DIST_PATH,
+      path: '/purgatory/Baryon/static/js/tui/',
       publicPath: 'dist/',
       pathinfo: false,
       filename: DIST_JS_NAME
@@ -201,72 +202,72 @@ if (isDevServer) {
   }
 
   // BuildAll Viewer
-  defaultConfigs[1].entry = {
-    'Viewer-all': ENTRY_VIEWER_ALL
-  };
-  defaultConfigs[1].output.library = NAME_SPACE;
-  defaultConfigs[1].output.libraryTarget = 'umd';
-  defaultConfigs[1].plugins.push(new webpack.IgnorePlugin(/editor$/, /extensions/));
-  if (isProduction) {
-    defaultConfigs[1].plugins.push(new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      reportFilename: `${ANALYZER_DIR}/stats-${pkg.version}-viewer-all.html`
-    }));
-  }
+  // defaultConfigs[1].entry = {
+  //   'Viewer-all': ENTRY_VIEWER_ALL
+  // };
+  // defaultConfigs[1].output.library = NAME_SPACE;
+  // defaultConfigs[1].output.libraryTarget = 'umd';
+  // defaultConfigs[1].plugins.push(new webpack.IgnorePlugin(/editor$/, /extensions/));
+  // if (isProduction) {
+  //   defaultConfigs[1].plugins.push(new BundleAnalyzerPlugin({
+  //     analyzerMode: 'static',
+  //     reportFilename: `${ANALYZER_DIR}/stats-${pkg.version}-viewer-all.html`
+  //   }));
+  // }
+  //
+  // // BuildExt
+  // defaultConfigs[2].entry = {
+  //   'extChart': ENTRY_EXT_CHART,
+  //   'extUML': ENTRY_EXT_UML,
+  //   'extColorSyntax': ENTRY_EXT_COLOR_SYNTAX,
+  //   'extScrollSync': ENTRY_EXT_SCROLL_SYNC,
+  //   'extTable': ENTRY_EXT_TABLE
+  // };
+  // defaultConfigs[2].output.libraryTarget = 'umd';
+  // defaultConfigs[2].externals.push(function(context, request, callback) {
+  //   const dir = path.relative(__dirname, context);
+  //   if (dir.includes('extensions')) {
+  //     if (request.match(/editor$/)) {
+  //       callback(null, {
+  //         commonjs: 'tui-editor',
+  //         commonjs2: 'tui-editor',
+  //         amd: 'tui-editor',
+  //         root: NAME_SPACE
+  //       });
+  //     } else if (request.match(/viewer$/)) {
+  //       callback(null, {
+  //         commonjs: 'tui-editor/dist/tui-editor-Viewer',
+  //         commonjs2: 'tui-editor/dist/tui-editor-Viewer',
+  //         amd: 'tui-editor/dist/tui-editor-Viewer',
+  //         root: NAME_SPACE
+  //       });
+  //     } else {
+  //       callback();
+  //     }
+  //   } else {
+  //     callback();
+  //   }
+  // });
+  // if (isProduction) {
+  //   defaultConfigs[2].plugins.push(new BundleAnalyzerPlugin({
+  //     analyzerMode: 'static',
+  //     reportFilename: `${ANALYZER_DIR}/stats-${pkg.version}-exts.html`
+  //   }));
+  // }
 
-  // BuildExt
-  defaultConfigs[2].entry = {
-    'extChart': ENTRY_EXT_CHART,
-    'extUML': ENTRY_EXT_UML,
-    'extColorSyntax': ENTRY_EXT_COLOR_SYNTAX,
-    'extScrollSync': ENTRY_EXT_SCROLL_SYNC,
-    'extTable': ENTRY_EXT_TABLE
-  };
-  defaultConfigs[2].output.libraryTarget = 'umd';
-  defaultConfigs[2].externals.push(function(context, request, callback) {
-    const dir = path.relative(__dirname, context);
-    if (dir.includes('extensions')) {
-      if (request.match(/editor$/)) {
-        callback(null, {
-          commonjs: 'tui-editor',
-          commonjs2: 'tui-editor',
-          amd: 'tui-editor',
-          root: NAME_SPACE
-        });
-      } else if (request.match(/viewer$/)) {
-        callback(null, {
-          commonjs: 'tui-editor/dist/tui-editor-Viewer',
-          commonjs2: 'tui-editor/dist/tui-editor-Viewer',
-          amd: 'tui-editor/dist/tui-editor-Viewer',
-          root: NAME_SPACE
-        });
-      } else {
-        callback();
-      }
-    } else {
-      callback();
-    }
-  });
-  if (isProduction) {
-    defaultConfigs[2].plugins.push(new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      reportFilename: `${ANALYZER_DIR}/stats-${pkg.version}-exts.html`
-    }));
-  }
-
-  // BuildNormal
-  defaultConfigs[3].entry = {
-    'Editor': ENTRY_MAIN,
-    'Viewer': ENTRY_VIEWER
-  };
-  defaultConfigs[3].output.library = NAME_SPACE;
-  defaultConfigs[3].output.libraryTarget = 'umd';
-  if (isProduction) {
-    defaultConfigs[3].plugins.push(new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      reportFilename: `${ANALYZER_DIR}/stats-${pkg.version}.html`
-    }));
-  }
+  // // BuildNormal
+  // defaultConfigs[3].entry = {
+  //   'Editor': ENTRY_MAIN,
+  //   'Viewer': ENTRY_VIEWER
+  // };
+  // defaultConfigs[3].output.library = NAME_SPACE;
+  // defaultConfigs[3].output.libraryTarget = 'umd';
+  // if (isProduction) {
+  //   defaultConfigs[3].plugins.push(new BundleAnalyzerPlugin({
+  //     analyzerMode: 'static',
+  //     reportFilename: `${ANALYZER_DIR}/stats-${pkg.version}.html`
+  //   }));
+  // }
 }
 
 module.exports = defaultConfigs;

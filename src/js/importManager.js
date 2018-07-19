@@ -2,7 +2,9 @@
  * @fileoverview Implement Module for managing import external data such as image
  * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
+import $ from 'jquery';
 import util from 'tui-code-snippet';
+
 const URLRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/([^\s]*))?$/g;
 
 /**
@@ -124,14 +126,66 @@ class ImportManager {
    * @private
    */
   _initDefaultImageImporter() {
+    var csrftoken;
+    csrftoken = getCookie('csrftoken');
+    function getCookie(name) {
+      var i, cookie, cookies;
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        cookies = document.cookie.split(';');
+        for (i = 0; i < cookies.length; i += 1) {
+          cookie = $.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      // test
+
+      return cookieValue;
+    }
+
+    function csrfSafeMethod(method) {
+      // these HTTP methods do not require CSRF protection
+      return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function initAjax() {
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
+          }
+        }
+      });
+    }
+    initAjax();
     this.eventManager.listen('addImageBlobHook', (blob, callback) => {
-      const reader = new FileReader();
+      const uploadUrl = '/api/material/';
+      var data = new FormData();
+      data.append('image', blob);
 
-      reader.onload = event => {
-        callback(event.target.result);
-      };
-
-      reader.readAsDataURL(blob);
+      return $.when($.ajax({
+        url: uploadUrl,
+        data: data,
+        method: 'POST',
+        cache: false,
+        contentType: false,
+        processData: false
+      })).then(function(imgObj) {
+        callback(imgObj.image);
+      }, (e)=> {
+        alert(e);
+      });
+      //
+      //
+      // reader.onload = event => {
+      //   callback(event.target.result);
+      // };
+      //
+      // reader.readAsDataURL(blob);
     });
   }
 
