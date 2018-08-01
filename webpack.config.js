@@ -48,10 +48,12 @@ const defaultConfigs = Array(1).fill(0).map(() => {
   return {
     cache: false,
     output: {
-      path: '/purgatory/Baryon/static/js/tui/',
+      // path: '/purgatory/Baryon/static/js/tui/',
+      path: path.resolve(__dirname, 'dist/'),
       publicPath: 'dist/',
       pathinfo: false,
       filename: DIST_JS_NAME
+      // filename: '[name].js'
     },
     module: {
       rules: [{

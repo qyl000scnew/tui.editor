@@ -24,7 +24,7 @@ const Heading = CommandManager.command('wysiwyg', /** @lends Heading */{
     const sq = wwe.getEditor();
     const blockTagName = 'h1, h2, h3, h4, h5, h6, div';
 
-    wwe.focus();
+    // wwe.focus();
 
     if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
       sq.modifyBlocks(fragment => {
