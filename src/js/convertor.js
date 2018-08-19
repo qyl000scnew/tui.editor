@@ -4,7 +4,8 @@
  */
 import $ from 'jquery';
 import util from 'tui-code-snippet';
-import MarkdownIt from 'markdown-it';
+// import MarkdownIt from 'markdown-it';            //源码
+import MarkdownIt from './markdownIt/markdownIt';   //改动
 import toMark from 'to-mark';
 
 import htmlSanitizer from './htmlSanitizer';
